@@ -10,7 +10,7 @@ juice提供了一个代码生成工具来方便开发者简化开发。
 
 .. code-block:: shell
 
-    go install https://github.com/eatmoreapple/juice/juicecli
+    go install github.com/eatmoreapple/juice/juicecli@latest
 
 执行完成之后，在终端输入 `juicecli` 来验证是否安装完成。
 
