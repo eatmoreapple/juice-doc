@@ -55,7 +55,7 @@ where语句用来判断条件，如果条件成立，则执行where语句中的s
     where语句中可以包含多个if语句，如果where语句中的所有if语句的条件表达式的值都为false，则不执行where语句中的sql语句。
 
 
-如果where语句中的所有if语句的条件表达式的值都为true，则执行where语句中的sql语句。如果where语句中的if语句的条件表达式的值不全为true或false，则执行where语句中的sql语句，并且去除多余的and 和 or。下面我们来看一个例子：
+如果where语句中的if语句的条件表达式的值都为true，则执行where语句中的sql语句，并且去除多余的and 和 or。下面我们来看一个例子：
 
 .. code-block:: xml
 
