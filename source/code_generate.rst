@@ -42,7 +42,7 @@ juice提供了一个代码生成工具来方便开发者简化开发。
     )
 
     type User struct {
-        ID   int64  `column:"id"`
+        ID   int64  `column:"id" autoincr:"true"`
         Name string `param:"name" column:"name"`
     }
 
@@ -170,7 +170,7 @@ juice提供了一个代码生成工具来方便开发者简化开发。
     )
 
     type User struct {
-        ID   int64  `column:"id"`
+        ID   int64  `column:"id" autoincr:"true"`
         Name string `param:"name" column:"name"`
     }
 
@@ -251,9 +251,9 @@ juice提供了一个代码生成工具来方便开发者简化开发。
 
 其实这个命令我们可以简化一下。
 
-config 可以不写，它会自动从执行命令的路径的同级目录下去找有没有config.xml这个文件。
+config 可以指定，它会自动从执行命令的路径的同级目录下去找有没有 config.xml 或者 config/config.xml 这个文件。
 
-namespace 也可以不写，它会自动去找go.mod这个文件和你接口定义的go文件中间的相对路径，将它作为namespace
+namespace 也可以不指定，它会自动去找go.mod这个文件和你接口定义的go文件中间的相对路径，将它作为namespace
 
 所以这个命令我们可以简化写成
 
