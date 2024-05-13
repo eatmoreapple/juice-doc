@@ -97,7 +97,7 @@ http://github.com/eatmoreapple/juice
          return
       }
 
-      engine, err := juice.DefaultEngine(cfg)
+      engine, err := juice.Default(cfg)
       if err != nil {
          fmt.Println(err)
          return
