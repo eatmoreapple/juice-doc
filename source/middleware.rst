@@ -18,9 +18,9 @@
     // Middleware is a wrapper of QueryHandler and ExecHandler.
     type Middleware interface {
     	// QueryContext wraps the QueryHandler.
-    	QueryContext(stmt *Statement, next QueryHandler) QueryHandler
+    	QueryContext(stmt Statement, next QueryHandler) QueryHandler
     	// ExecContext wraps the ExecHandler.
-    	ExecContext(stmt *Statement, next ExecHandler) ExecHandler
+    	ExecContext(stmt Statement, next ExecHandler) ExecHandler
     }
 
 中间件的作用是在执行SQL语句之前，对SQL语句进行一些处理，比如SQL语句的日志记录，SQL语句的缓存等等。
@@ -41,7 +41,7 @@ juice中内置了一些中间件，比如：
 
     // QueryContext implements Middleware.
     // QueryContext will print the sql statement and the execution time.
-    func (m *DebugMiddleware) QueryContext(stmt *Statement, next QueryHandler) QueryHandler {
+    func (m *DebugMiddleware) QueryContext(stmt Statement, next QueryHandler) QueryHandler {
     	if !m.isBugMode(stmt) {
     		return next
     	}
@@ -57,7 +57,7 @@ juice中内置了一些中间件，比如：
 
     // ExecContext implements Middleware.
     // ExecContext will print the sql statement and the execution time.
-    func (m *DebugMiddleware) ExecContext(stmt *Statement, next ExecHandler) ExecHandler {
+    func (m *DebugMiddleware) ExecContext(stmt Statement, next ExecHandler) ExecHandler {
     	if !m.isBugMode(stmt) {
     		return next
     	}
@@ -74,7 +74,7 @@ juice中内置了一些中间件，比如：
     // isBugMode returns true if the debug mode is on.
     // Default debug mode is on.
     // You can turn off the debug mode by setting the debug tag to false in the mapper statement attribute or the configuration.
-    func (m *DebugMiddleware) isBugMode(stmt *Statement) bool {
+    func (m *DebugMiddleware) isBugMode(stmt Statement) bool {
     	// try to one the bug mode from the Statement
     	debug := stmt.Attribute("debug")
     	// if the bug mode is not set, try to one the bug mode from the Context
@@ -114,7 +114,7 @@ juice中内置了一些中间件，比如：
 
     // QueryContext implements Middleware.
     // QueryContext will set the timeout for the sql statement.
-    func (t TimeoutMiddleware) QueryContext(stmt *Statement, next QueryHandler) QueryHandler {
+    func (t TimeoutMiddleware) QueryContext(stmt Statement, next QueryHandler) QueryHandler {
     	timeout := t.getTimeout(stmt)
     	if timeout <= 0 {
     		return next
@@ -128,7 +128,7 @@ juice中内置了一些中间件，比如：
 
     // ExecContext implements Middleware.
     // ExecContext will set the timeout for the sql statement.
-    func (t TimeoutMiddleware) ExecContext(stmt *Statement, next ExecHandler) ExecHandler {
+    func (t TimeoutMiddleware) ExecContext(stmt Statement, next ExecHandler) ExecHandler {
     	timeout := t.getTimeout(stmt)
     	if timeout <= 0 {
     		return next
@@ -141,7 +141,7 @@ juice中内置了一些中间件，比如：
     }
 
     // getTimeout returns the timeout from the Statement.
-    func (t TimeoutMiddleware) getTimeout(stmt *Statement) (timeout int64) {
+    func (t TimeoutMiddleware) getTimeout(stmt Statement) (timeout int64) {
     	timeoutAttr := stmt.Attribute("timeout")
     	if timeoutAttr == "" {
     		return
