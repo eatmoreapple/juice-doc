@@ -100,24 +100,31 @@ Executor
 
 .. code-block:: go
 
-    // Executor is an executor of SQL.
-    type Executor interface {
-        QueryContext(ctx context.Context, param interface{}) (*sql.Rows, error)
-        ExecContext(ctx context.Context, param interface{}) (sql.Result, error)
-        Statement() *Statement
+    // GenericExecutor is a generic executor.
+    type GenericExecutor[T any] interface {
+    	// QueryContext executes the query and returns the direct result.
+    	// The args are for any placeholder parameters in the query.
+    	QueryContext(ctx context.Context, param Param) (T, error)
+
+    	// ExecContext executes a query without returning any rows.
+    	// The args are for any placeholder parameters in the query.
+    	ExecContext(ctx context.Context, param Param) (sql.Result, error)
+
+    	// Statement returns the xmlSQLStatement of the current executor.
+    	Statement() Statement
+
+    	// Session returns the session of the current executor.
+    	Session() Session
+
+    	// Driver returns the driver of the current executor.
+    	Driver() driver.Driver
     }
 
-* ``Query`` : 接受一个参数，执行查询操作，返回 ``sql.Rows`` 对象和 ``error``
+    // Executor defines the interface of the executor.
+    type Executor GenericExecutor[*sql.Rows]
 
-* ``QueryContext`` : 接受一个 ``context.Context`` 和一个参数，执行查询操作，返回 ``sql.Rows`` 对象和 ``error``
 
-* ``Exec`` : 接受一个参数，执行非查询操作，返回 ``sql.Result`` 对象和 ``error``
-
-* ``ExecContext`` : 接受一个 ``context.Context`` 和一个参数，执行非查询操作，返回 ``sql.Result`` 对象和 ``error``
-
-* ``Statement`` : 返回当前的statement对象
-
-因为我们这里是查询操作，所以我们使用 ``Query`` 方法，并且我们的sql语句没有参数，所以我们传入 ``nil``
+因为我们这里是查询操作，所以我们使用 ``QueryContext`` 方法，并且我们的sql语句没有参数，所以我们传入 ``nil``
 
 得到 ``sql.Rows`` 后，我们可以使用 ``sql.Rows`` 的方法来遍历查询结果，最后关闭 ``sql.Rows``。
 
